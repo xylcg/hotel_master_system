@@ -1,0 +1,44 @@
+{% extends "back/base.html" %}
+
+{% block title %}订单管理{% endblock %}
+
+{% block content %}
+<h2>订单管理</h2>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>订单号</th>
+            <th>房间</th>
+            <th>客户</th>
+            <th>入住日期</th>
+            <th>退房日期</th>
+            <th>总价</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>#{{ order.id }}</td>
+            <td>{{ order.room.name }}</td>
+            <td>{{ order.user.username }}</td>
+            <td>{{ order.check_in.strftime('%Y-%m-%d') }}</td>
+            <td>{{ order.check_out.strftime('%Y-%m-%d') }}</td>
+            <td>¥{{ order.total_price }}</td>
+            <td>{{ order.status }}</td>
+            <td>
+                <form method="post" action="{{ url_for('update_order_status', order_id=order.id) }}">
+                    <select name="status" onchange="this.form.submit()">
+                        <option value="pending" {% if order.status == '待处理' %}selected{% endif %}>待处理</option>
+                        <option value="confirmed" {% if order.status == '已确认' %}selected{% endif %}>已确认</option>
+                        <option value="cancelled" {% if order.status == '已取消' %}selected{% endif %}>已取消</option>
+                    </select>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

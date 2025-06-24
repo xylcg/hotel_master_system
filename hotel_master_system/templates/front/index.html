@@ -1,0 +1,23 @@
+{% extends "front/base.html" %}
+
+{% block title %}酒店首页{% endblock %}
+
+{% block content %}
+<h2>欢迎光临阳光酒店</h2>
+<p>为您提供舒适的住宿体验</p>
+
+<div class="room-list">
+    {% for room in rooms %}
+    <div class="room-card">
+        <img src="{{ url_for('static', filename='images/' + (room.image or 'default.jpg')) }}" alt="{{ room.name }}">
+        <div class="info">
+            <h3>{{ room.name }}</h3>
+            <p>类型: {{ room.type }}</p>
+            <p>价格: ¥{{ room.price }}/晚</p>
+            <p>可住: {{ room.capacity }}人</p>
+            <a href="{{ url_for('room_detail', room_id=room.id) }}" class="btn">查看详情</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "front/base.html" %}
+
+{% block title %}预订{{ room.name }}{% endblock %}
+
+{% block content %}
+<h2>预订 {{ room.name }}</h2>
+
+<form method="post" class="booking-form">
+    <div class="form-group">
+        <label for="check_in">入住日期</label>
+        <input type="date" id="check_in" name="check_in" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="check_out">退房日期</label>
+        <input type="date" id="check_out" name="check_out" required>
+    </div>
+    
+    <div class="form-group">
+        <p>价格: ¥{{ room.price }}/晚</p>
+    </div>
+    
+    <button type="submit" class="btn">确认预订</button>
+    <a href="{{ url_for('room_detail', room_id=room.id) }}" class="btn">返回</a>
+</form>
+{% endblock %}

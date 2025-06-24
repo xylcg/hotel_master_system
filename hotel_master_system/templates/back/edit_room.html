@@ -1,0 +1,54 @@
+{% extends "back/base.html" %}
+
+{% block title %}编辑客房{% endblock %}
+
+{% block content %}
+<h2>编辑客房</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="name">客房名称</label>
+        <input type="text" id="name" name="name" value="{{ room.name }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="price">价格</label>
+        <input type="number" id="price" name="price" step="0.01" value="{{ room.price }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="type">客房类型</label>
+        <select id="type" name="type" required>
+            <option value="单人间" {% if room.type == '单人间' %}selected{% endif %}>单人间</option>
+            <option value="双人间" {% if room.type == '双人间' %}selected{% endif %}>双人间</option>
+            <option value="大床房" {% if room.type == '大床房' %}selected{% endif %}>大床房</option>
+            <option value="套房" {% if room.type == '套房' %}selected{% endif %}>套房</option>
+            <option value="豪华套房" {% if room.type == '豪华套房' %}selected{% endif %}>豪华套房</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="capacity">可住人数</label>
+        <input type="number" id="capacity" name="capacity" min="1" value="{{ room.capacity }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="description">描述</label>
+        <textarea id="description" name="description" rows="4" required>{{ room.description }}</textarea>
+    </div>
+    
+    <div class="form-group">
+        <label for="image">客房图片</label>
+        <input type="file" id="image" name="image">
+        {% if room.image %}
+        <div class="current-image">
+            <p>当前图片: {{ room.image }}</p>
+            <img src="{{ url_for('static', filename='images/' + room.image) }}" alt="{{ room.name }}" style="max-width: 200px;">
+        </div>
+        {% endif %}
+    </div>
+    
+    <button type="submit" class="btn">保存更改</button>
+    <a href="{{ url_for('admin_rooms') }}" class="btn">取消</a>
+</form>
+{% endblock %}

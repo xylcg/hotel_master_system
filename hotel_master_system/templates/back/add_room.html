@@ -1,0 +1,48 @@
+{% extends "back/base.html" %}
+
+{% block title %}添加新客房{% endblock %}
+
+{% block content %}
+<h2>添加新客房</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="name">客房名称</label>
+        <input type="text" id="name" name="name" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="price">价格</label>
+        <input type="number" id="price" name="price" step="0.01" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="type">客房类型</label>
+        <select id="type" name="type" required>
+            <option value="单人间">单人间</option>
+            <option value="双人间">双人间</option>
+            <option value="大床房">大床房</option>
+            <option value="套房">套房</option>
+            <option value="豪华套房">豪华套房</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="capacity">可住人数</label>
+        <input type="number" id="capacity" name="capacity" min="1" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="description">描述</label>
+        <textarea id="description" name="description" rows="4" required></textarea>
+    </div>
+    
+    <div class="form-group">
+        <label for="image">客房图片</label>
+        <input type="file" id="image" name="image">
+    </div>
+    
+    <button type="submit" class="btn">添加客房</button>
+    <a href="{{ url_for('admin_rooms') }}" class="btn">取消</a>
+</form>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "back/base.html" %}
+
+{% block title %}用户管理{% endblock %}
+
+{% block content %}
+<h2>用户管理</h2>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>用户名</th>
+            <th>电子邮箱</th>
+            <th>电话</th>
+            <th>角色</th>
+            <th>注册时间</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.phone }}</td>
+            <td>
+                <select onchange="updateUserRole(this, {{ user.id }})">
+                    <option value="user" {% if user.role == 'user' %}selected{% endif %}>用户</option>
+                    <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>管理员</option>
+                </select>
+            </td>
+            <td>{{ user.created_at.strftime('%Y-%m-%d') }}</td>
+            <td>
+    <form method="post" action="{{ url_for('admin_delete_user', user_id=user.id) }}" style="display: inline;">
+        <button type="submit" class="btn btn-small btn-danger"
+                onclick="return confirm('确定要删除用户 {{ user.username }} 吗？此操作不可撤销！')">
+            删除
+        </button>
+    </form>
+</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+function updateUserRole(select, userId) {
+    const role = select.value;
+    fetch(`/admin/user/role/${userId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `role=${role}`
+    }).then(response => {
+        if(response.ok) {
+            location.reload();
+        }
+    });
+}
+</script>
+{% endblock %}

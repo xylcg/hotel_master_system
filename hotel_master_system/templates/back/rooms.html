@@ -1,0 +1,60 @@
+{% extends "back/base.html" %}
+
+{% block title %}客房管理{% endblock %}
+
+{% block content %}
+<h2>客房管理</h2>
+
+<div class="actions">
+    <a href="{{ url_for('admin_add_room') }}" class="btn">添加新客房</a>
+</div>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>名称</th>
+            <th>类型</th>
+            <th>价格</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for room in rooms %}
+        <tr>
+            <td>{{ room.id }}</td>
+            <td>{{ room.name }}</td>
+            <td>{{ room.type }}</td>
+            <td>¥{{ room.price }}</td>
+            <td>{{ '可预订' if room.status == 'available' else '已预订' }}</td>
+            <td>
+    <a href="{{ url_for('admin_edit_room', room_id=room.id) }}" class="btn btn-small">编辑</a>
+    <form method="post" action="{{ url_for('admin_delete_room', room_id=room.id) }}" style="display: inline;">
+        <button type="submit" class="btn btn-small btn-danger" onclick="return confirm('确定要删除这个客房吗？')">删除</button>
+    </form>
+</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+<script>
+function confirmDelete(roomId) {
+    if (confirm('确定要删除这个客房吗？此操作不可撤销！')) {
+        fetch(`/admin/room/delete/${roomId}`, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({})
+        }).then(response => {
+            if (response.ok) {
+                location.reload();
+            }
+        });
+    }
+    return false;
+}
+</script>

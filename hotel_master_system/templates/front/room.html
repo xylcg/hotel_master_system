@@ -1,0 +1,37 @@
+{% extends "front/base.html" %}
+
+{% block title %}{{ room.name }} - 客房详情{% endblock %}
+
+{% block content %}
+<div class="room-detail">
+    <img src="{{ url_for('static', filename='images/' + (room.image or 'default.jpg')) }}" alt="{{ room.name }}" class="room-image">
+    <div class="room-info">
+        <h2>{{ room.name }}</h2>
+        <p><strong>价格:</strong> ¥{{ room.price }}/晚</p>
+        <p><strong>类型:</strong> {{ room.type }}</p>
+        <p><strong>可住人数:</strong> {{ room.capacity }}人</p>
+        <p><strong>状态:</strong> {{ '可预订' if room.status == 'available' else '已预订' }}</p>
+        <p>{{ room.description }}</p>
+        
+        {% if room.status == 'available' %}
+        <a href="{{ url_for('book_room', room_id=room.id) }}" class="btn">立即预订</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="comments">
+    <h3>客户评价</h3>
+    {% if comments %}
+        {% for comment in comments %}
+        <div class="comment">
+            <p><strong>{{ comment.user.username }}</strong> 
+               <span class="rating">评分: {{ '★' * comment.rating }}{{ '☆' * (5-comment.rating) }}</span></p>
+            <p>{{ comment.content }}</p>
+            <small>{{ comment.created_at.strftime('%Y-%m-%d') }}</small>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>暂无评价</p>
+    {% endif %}
+</div>
+{% endblock %}
